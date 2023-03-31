@@ -1,14 +1,14 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SelectMultipleField, TextAreaField
+from wtforms import StringField, SelectField, SelectMultipleField, TextAreaField,PasswordField
 from .wikidata import Classe
 
 class Connexion(FlaskForm):
     nom = StringField("nom", validators=[])
-    password = StringField("password", validators=[])
+    password = PasswordField("password", validators=[])
 
 class Inscription(FlaskForm):
     nom = StringField("nom", validators=[])
-    password = StringField("password", validators=[])
+    password = PasswordField("password", validators=[])
     confirmation_password = StringField("confirmation_password", validators=[])
 
 class Recherche(FlaskForm):

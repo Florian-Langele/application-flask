@@ -61,7 +61,6 @@ def recherche():
 @app.route("/resultat", methods=["GET","POST"])
 @login_required
 def resultat():
-
     #Récupération des propriétés associés à la classe choisie pour le prochain formulaire
     form = Proprietes()
     choix_proprietes = []

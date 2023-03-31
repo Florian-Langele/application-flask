@@ -46,16 +46,12 @@ def recherche():
             })
         session['recherche']['liste_entite'] = resultat_final
 
+        #Prévention pour éviter les erreurs on ne peut pas aller plus loin si il n'y a pas de résultat
         if session['recherche']['liste_entite'] == []:
             flash("Votre recherche n'a rien trouvé")
             
             return redirect(url_for('recherche'))
 
-    #Récupération des propriétés associés à la classe choisie pour le prochain formulaire
-        """query = Classe.query
-        proprietes = query.filter(Classe.id == session['recherche']['classe']).first().proprietes
-        return render_template("pages/resultat.html",resultat=resultat_final)"""
-        
         return redirect(url_for('resultat')) 
 
     session["recherche"].clear()
@@ -65,7 +61,8 @@ def recherche():
 @app.route("/resultat", methods=["GET","POST"])
 @login_required
 def resultat():
-    
+
+    #Récupération des propriétés associés à la classe choisie pour le prochain formulaire
     form = Proprietes()
     choix_proprietes = []
     for propriete in Classe.query.filter(Classe.id==session['recherche']['classe']).first().proprietes:
@@ -75,7 +72,7 @@ def resultat():
     if form.validate_on_submit():
         #Récupération dans la session des propriétés choisies par l'utilisateur
         session["recherche"]["proprietes"] = request.form.getlist("proprietes",None)
-
+        
         if len(session['recherche']['proprietes']) == 0:
             flash("Merci de sélectionner au moins une propriété dans la liste")
             return render_template('pages/resultat.html',resultat=session['recherche']['liste_entite'],form = form)
@@ -95,15 +92,16 @@ def resultat():
             proprietes[entite] = []
             for chaque_propriete in resultat[entite]['claims']:
                 if chaque_propriete in session['recherche']['proprietes']:
-                    proprietes[entite].append((chaque_propriete,resultat[entite]['claims'][chaque_propriete][0]['mainsnak']['datatype'],resultat[entite]['claims'][chaque_propriete][0]['mainsnak']['datavalue']))
-        
+                    for value in resultat[entite]['claims'][chaque_propriete]:
+                        proprietes[entite].append((chaque_propriete,value['mainsnak']['datatype'],value['mainsnak']['datavalue']))
+
         
         #On range dans session
         for entite in session['recherche']['liste_entite']:
             entite['propriete'] = proprietes[entite['id']]
 
         label_propriete = {}
-
+        
         #Ajout des labels des différentes propriétés contenues dans la BDD
         for propriete in session['recherche']['proprietes']:
             if propriete == "P625":
@@ -130,13 +128,16 @@ def resultat():
                 return "Problème du serveur wikidata"
         resultat = resultat['entities']
 
-        #On modifie la valeur associé aux propriétés qui était des identifiants par les labels de ceux ci, on en profite pour faire remonter l'info des coordonnées
+        #On modifie la valeur associé aux propriétés qui était des identifiants par les labels de ceux ci, on en profite pour faire remonter l'info des coordonnées et normalisé les autres types de données
         for entite in session['recherche']['liste_entite']:
             for propriete in entite['propriete']:
                 if propriete[1] == 'wikibase-item' and propriete[2]['value']['id'] in resultat.keys():
                     propriete[2]['value'] = resultat[propriete[2]['value']['id']]['labels'][session['recherche']['langue']]['value']
                 elif propriete[1] == 'globe-coordinate':
                     entite['coordonnees'] = [propriete[2]['value']['latitude'],propriete[2]['value']['longitude']]
+                elif propriete[1] == 'time':
+                    temps = propriete[2]['value']['time'][1:10]
+                    propriete[2]['value'] = ' '.join(str(int(date)) if int(date) != 0 else '' for date in reversed(temps.split('-')))
 
 
         session["recherche"]['proprietes'].pop('P625')

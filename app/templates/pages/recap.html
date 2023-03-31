@@ -25,7 +25,7 @@ crossorigin=""/>
     {%for entite in donnees.liste_entite%}
     <script>
         var point = L.marker([{{entite.coordonnees[0]}},{{entite.coordonnees[1]}}]).addTo(map);
-        point.bindPopup("<h4>{{entite.label}}</h4>{%for propriete in donnees.proprietes%}<p>{{donnees.proprietes[propriete]}} :{%for p in entite.propriete%}{%if p[0] == propriete%}{%if p[1] == 'commonsMedia'%}<a href='https://commons.wikimedia.org/wiki/File:{{p[2].value}}'>lien</a>{%else%}{{p[2].value}}{%endif%}{%endif%}{%endfor%}</p>{%endfor%}");
+        point.bindPopup("<h4>{{entite.label}}</h4>{%for propriete in donnees.proprietes%}<p>{{donnees.proprietes[propriete]}} :{%for p in entite.propriete%}{%if p[0] == propriete%}{%if p[1] == 'commonsMedia'%}<a href='https://commons.wikimedia.org/wiki/File:{{p[2].value}}'>lien</a>{%else%}{{p[2].value}}. {%endif%}{%endif%}{%endfor%}</p>{%endfor%}");
         dict_points["{{entite.id}}"] = point
     </script>
     <span id="{{entite.id}}">{{entite.label}}</span>

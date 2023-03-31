@@ -1,0 +1,25 @@
+{%extends "fragments/header/header.html"%}
+
+{%block body%}
+
+<h1>Resultat</h1>
+<ul>
+{%for entite in resultat%}
+<li>{{entite.label}}</li>
+{%endfor%}
+</ul>
+
+<form method="post" name="resultat">
+    {{form.hidden_tag() }}
+    <div align="left">
+    <p>Choissiez les propriétés à rechercher :</p>
+        <span>
+            {{form.proprietes}}
+        </span>
+    </div>
+    <div align="center">
+        <button type="submit">Rechercher</button>
+    </div>
+</form>
+
+{%endblock%}

@@ -1,0 +1,18 @@
+<form method="post" name="connexion">
+    {{form.hidden_tag() }}
+    <div align="left">
+    <p>Rentrez le nom :</p>
+        <span>
+            {{form.nom}}
+        </span>
+    </div>
+    <div align="left">
+        <p>Veuillez indiquer votre mot de passe :</p>
+        <span>
+            {{form.password}}
+        </span>
+    </div>
+    <div align="center">
+        <button type="submit">Se connecter</button>
+    </div>
+</form>

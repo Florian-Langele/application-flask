@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/stylesheet.css')}}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {%block header%}{%endblock%}
+    <title>Requete API</title>
+</head>
+<body>
+    <div class="users">
+        {%if current_user.is_authenticated%}
+        <p class="users_elements">Vous êtes connecté {{current_user.nom }}</p>
+        <form align="center" class="users_elements" action="{{url_for('deconnexion')}}">
+            <button type="submit">Se déconnecter</button>
+        </form>
+        {%else%}
+        <form align="center" class="users_elements" action="{{url_for('inscription')}}">
+            <button type="submit">S'inscrire</button>
+        </form>
+        <form align="center" class="users_elements" action="{{url_for('connexion')}}">
+            <button type="submit">Se connecter</button>
+        </form>
+        {%endif%}
+        {% with messages = get_flashed_messages() %}
+        {%if messages%}
+        {%for message in messages%}
+        <p>{{message}}</p>
+        {%endfor%}
+        {%endif%}
+        {%endwith%}
+    </div>
+    <div class="body">
+        {%block body%}{%endblock%}
+    </div>
+</body>
+</html>

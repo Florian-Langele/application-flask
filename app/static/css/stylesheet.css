@@ -1,0 +1,25 @@
+#map{
+    margin: auto;
+    height: 600px;
+    width: 600px;
+}
+
+.users{
+    background-color: aquamarine;
+    padding: 1%;
+}
+
+.users_elements{
+    display: inline;
+    font-size: 25px;
+}
+
+.vue-lieu > span{
+
+    background-color: lightcoral;
+    border: 2px;
+    border-style: solid;
+    border-color: lightgray;
+    padding: 1%;
+    display: inline-block;
+}

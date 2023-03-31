@@ -1,0 +1,30 @@
+<form method="post" name="recherche">
+    {{form.hidden_tag() }}
+    <div align="left">
+    <p>Rentrez le lieux recherché :</p>
+        <span>
+            {{form.recherche}}
+        </span>
+    </div>
+    <div align="left">
+        <p>Saisissez le type de lieu recherché :</p>
+        <span>
+            {{form.classe}}
+        </span>
+    </div>
+    <div align="left">
+        <p>Choisissez la langue de recherche :</p>
+        <span>
+            {{form.langue}}
+        </span>
+    </div>
+    <div align="left">
+        <p>Combien de résultat maximum voulez-vous ?</p>
+        <span>
+            {{form.nombre}}
+        </span>
+    </div>
+    <div align="center">
+        <button type="submit">Rechercher</button>
+    </div>
+</form>

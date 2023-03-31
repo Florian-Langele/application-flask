@@ -1,0 +1,43 @@
+{%extends "fragments/header/header.html"%}
+
+{%block header%}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+crossorigin=""/>
+        
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script>
+{%endblock%}
+
+{%block body%}
+<h2>Vous avez recherché : {{donnees.champs}}</h2>
+<h4>Il y a eu {{donnees.liste_entite|count}} résultat(s) :</h4>
+<div>
+<div id="map">
+    <script>
+        var map = L.map('map').setView([45.505,3.0],5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+        var dict_points = {};
+    </script>
+</div>
+<div class="vue-lieu">
+    {%for entite in donnees.liste_entite%}
+    <script>
+        var point = L.marker([{{entite.coordonnees[0]}},{{entite.coordonnees[1]}}]).addTo(map);
+        point.bindPopup("<h4>{{entite.label}}</h4>{%for propriete in donnees.proprietes%}<p>{{donnees.proprietes[propriete]}} :{%for p in entite.propriete%}{%if p[0] == propriete%}{%if p[1] == 'commonsMedia'%}<a href='https://commons.wikimedia.org/wiki/File:{{p[2].value}}'>lien</a>{%else%}{{p[2].value}}{%endif%}{%endif%}{%endfor%}</p>{%endfor%}");
+        dict_points["{{entite.id}}"] = point
+    </script>
+    <span id="{{entite.id}}">{{entite.label}}</span>
+    <script>
+        var bouton = document.querySelector("span[id={{entite.id}}]")
+        bouton.onclick = function(){
+            map.setView([{{entite.coordonnees[0]}},{{entite.coordonnees[1]}}],11)
+            dict_points["{{entite.id}}"].openPopup()
+        }
+    </script>
+    {%endfor%}
+</div>
+</div>
+<a href="{{url_for("recherche")}}">Refaire une recherche</a>
+{%endblock%}

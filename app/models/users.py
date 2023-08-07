@@ -2,7 +2,24 @@ from ..app import app, db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
+
+
 class Users(UserMixin, db.Model):
+
+    """
+Une classe utilisée pour la gestion des utilisateurs.
+
+Attributes 
+---------
+id : sqlalchemy.sql.schema.Column
+        Identifiant de l'utilisateur. C'est la clé primaire. Cet attribut est une Column SQLALchemy.
+nom : sqlalchemy.sql.schema.Column
+        Nom de l'utilisateur
+password : sqlalchemy.sql.schema.Column
+        Mot de passé hashé de l'utilisateur
+
+"""
+
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
